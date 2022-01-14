@@ -70,4 +70,27 @@ describe('Promotion Plans', () => {
         expect(creations).toHaveLength(2); 
         expect(deletions).toHaveLength(0); 
     }); 
+
+
+    test('Deletes all orphan followers', () => {
+        const promotions = []; 
+        const cart = (new CartGenerator([
+            {
+                id: 444444,
+                key: 'def',
+                variant_id: 789,
+                quantity: 2,
+                properties: {
+                    _promotion: 'true', 
+                    _promotion_leader: 'false', 
+                    _promotion_key: 'addnewitem', 
+                    _promotion_leader_key: 'abc'
+                }
+            }, 
+        ])).generate(); 
+
+        const {deletions} = (new Plan(cart)).create(promotions); 
+
+        expect(deletions).toEqual(['def']); 
+    }); 
 }); 

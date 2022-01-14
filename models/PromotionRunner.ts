@@ -41,7 +41,7 @@ export default class PromotionRunner {
      * @param plan 
      * @returns 
      */
-    async execute(plan: Plan) {
+    async commit(plan: Plan) {
         return {} as Cart; // this should return the updated cart, 
     }
 
@@ -56,6 +56,6 @@ export default class PromotionRunner {
 
         const plan = await this.plan(cart); 
 
-        return this.execute(plan); 
+        return this.commit(plan); 
     }
 }

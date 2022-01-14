@@ -130,5 +130,5 @@ describe('Promotion Tests', () => {
         }); 
         expect(creations).toHaveLength(0);
         expect(deletions).toHaveLength(0); 
-    }); 
+    });
 }); 

@@ -30,6 +30,29 @@ export default class Plan {
             this.deletions = [...this.deletions, ...state.deletions]; 
         });
 
+        this.deletions = [
+            ...this.deletions, 
+            ...this.removeOrphans()
+        ]
+
         return this;
     }
+
+
+    /**
+     * Creates a deletion array with all the orphans. 
+     * 
+     * @returns 
+     */
+    removeOrphans(): string[] {
+        // Orphans are all the followers that do not have a belonging 
+        // leader line_item. 
+        return this.cart.line_items.filter( item => {
+            return item.properties?._promotion_leader === 'false'
+                && !this.cart.line_items.some( found => {
+                    return found.key === item.properties?._promotion_leader_key
+                }); 
+        }).map(item => item.key); 
+    }
+
 }
