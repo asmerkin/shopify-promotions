@@ -1,6 +1,19 @@
 import Promotion from '../models/Promotion'; 
 import Plan from '../models/Plan'; 
 import Cart from '../definitions/Cart'; 
+import CartApi from '../helpers/CartApi';
+
+interface RegistrablePromotion {
+    key: string,
+    lookup_variants: number[],
+    add_variants: Array<{
+        id: number, 
+        quantity: number, 
+        properties?: Array<{
+            [index: string]: string
+        }>
+    }>
+}
 
 export default class PromotionRunner {
     promotions: Promotion[] = []; 
@@ -9,9 +22,11 @@ export default class PromotionRunner {
      * Registers a new promotion. 
      * @param promotion the promotion to register. 
      */
-    register(promotion: Promotion | Promotion[]): void {
+    register(promotion: RegistrablePromotion | RegistrablePromotion[]): void {
         if (Array.isArray(promotion)) {
-            promotion.forEach(p => this.promotions.push(p)); 
+            promotion.forEach(p => this.promotions.push(
+                new Promotion(p)
+            )); 
         } else {
             this.promotions.push(new Promotion(promotion)); 
         }
@@ -41,8 +56,54 @@ export default class PromotionRunner {
      * @param plan 
      * @returns 
      */
-    async commit(plan: Plan) {
-        return {} as Cart; // this should return the updated cart, 
+    async commit(cart: Cart, plan: Plan) {
+        const actions = []; 
+        // this method should create a series of calls to, 
+        // 1. delete all deltable items. 
+        // 2. mutate all changeable items. 
+        // 3. add all new items. 
+        if ( plan.deletions.length > 0) {
+            actions.push({
+                action: 'update', 
+                payload: cart.line_items.map( item => {
+                    return plan.deletions.includes(item.key)
+                        ? 0
+                        : item.quantity; 
+                })
+            }); 
+        }
+
+        if ( plan.mutations.length > 0 ) {
+            plan.mutations.forEach( mutation => {
+                actions.push({
+                    action: 'change', 
+                    payload: {
+                        id: mutation.key, 
+                        quantity: mutation.quantity, 
+                        properties: mutation.properties
+                    }
+                })
+            }); 
+        }
+
+        if(  plan.creations.length > 0 ) {
+            actions.push({
+                actions: 'add', 
+                payload: {
+                    items: plan.creations.map( creation => {
+                        return {
+                            id: creation.id, 
+                            quantity: creation.quantity, 
+                            properties: creation.properties
+                        }; 
+                    })
+                }
+            })
+        }
+        
+        const updatedCart = CartApi.process(actions); 
+
+        return updatedCart;
     }
 
     /**
@@ -56,6 +117,6 @@ export default class PromotionRunner {
 
         const plan = await this.plan(cart); 
 
-        return this.commit(plan); 
+        return this.commit(cart, plan); 
     }
 }

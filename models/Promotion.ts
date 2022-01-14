@@ -1,32 +1,5 @@
 import Cart, { CartLineItem } from "../definitions/Cart";
-
-type PromotionStateCreation = {
-    id: number,
-    quantity: number,
-    properties: {
-        _promotion: 'true' | 'false', 
-        _promotion_key: string,
-        _promotion_leader: 'true' | 'false',
-        _promotion_leader_key: string
-    }
-};
-
-type PromotionStateMutation = {
-    key: string,
-    quantity: number,
-    properties: {
-        _promotion: 'true' | 'false', 
-        _promotion_key: string,
-        _promotion_leader: 'true' | 'false',
-        _promotion_leader_key: string
-    }
-}
-
-interface PromotionState {
-    creations: PromotionStateCreation[], 
-    mutations: PromotionStateMutation[], 
-    deletions: string[]
-}
+import { PromotionState } from "../definitions/State";
 
 export default class Promotion {
 

@@ -1,5 +1,5 @@
-import Cart, { CartLineItem } from "../definitions/Cart";
-import { findCartItemByKey } from "../helpers";
+import Cart from "../definitions/Cart";
+import { PromotionStateCreation, PromotionStateMutation } from "../definitions/State";
 import Promotion from "./Promotion";
 
 export default class Plan {
@@ -7,8 +7,8 @@ export default class Plan {
     promotions: Promotion[];
 
     // This will contain all the results to handle.
-    mutations: object[] = [];
-    creations: object[] = [];
+    mutations: PromotionStateMutation[] = [];
+    creations: PromotionStateCreation[] = [];
     deletions: string[] = [];
 
     constructor(cart: Cart) {
@@ -25,15 +25,13 @@ export default class Plan {
         promotions.forEach((promotion) => {
             let state = promotion.run(this.cart); 
 
-            this.creations = [...this.creations, ...state.creations]; 
-            this.mutations = [...this.mutations, ...state.mutations]; 
-            this.deletions = [...this.deletions, ...state.deletions]; 
+            this.setCreations(state.creations); 
+            this.setMutations(state.mutations); 
+            this.setDeletions(state.deletions); 
         });
 
-        this.deletions = [
-            ...this.deletions, 
-            ...this.removeOrphans()
-        ]
+        // Removing orphans. 
+        this.setDeletions(this.removeOrphans()); 
 
         return this;
     }
@@ -53,6 +51,55 @@ export default class Plan {
                     return found.key === item.properties?._promotion_leader_key
                 }); 
         }).map(item => item.key); 
+    }
+
+
+    /**
+     * Sets the list of mutations into the plan. 
+     * 
+     * @param mutations the list of mutations 
+     * @returns Plan 
+     */
+    setMutations(mutations: PromotionStateMutation | PromotionStateMutation[]): Plan {
+        if ( Array.isArray(mutations)) {
+            this.mutations = [...this.mutations, ...mutations]; 
+        } else {
+            this.mutations.push(mutations); 
+        }
+
+        return this; 
+    }
+
+
+    /**
+     * Sets a list of items to create. 
+     * 
+     * @param creations the list of creations 
+     * @returns Plan 
+     */
+    setCreations(creations: PromotionStateCreation | PromotionStateCreation[]): Plan {
+        if ( Array.isArray(creations)) {
+            this.creations = [...this.creations, ...creations]; 
+        } else {
+            this.creations.push(creations); 
+        }
+
+        return this; 
+    }
+
+    /**
+     * Sets a list of deletions
+     * @param deletions the keys to delete. 
+     * @returns Plan 
+     */
+    setDeletions(deletions: string | string[]): Plan {
+        if ( Array.isArray(deletions)) {
+            this.deletions = [...this.deletions, ...deletions]; 
+        } else {
+            this.deletions.push(deletions); 
+        }
+
+        return this; 
     }
 
 }
