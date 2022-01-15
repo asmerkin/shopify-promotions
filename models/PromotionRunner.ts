@@ -1,7 +1,7 @@
 import Promotion from '../models/Promotion'; 
 import Plan from '../models/Plan'; 
 import Cart from '../definitions/Cart'; 
-import CartApi from '../helpers/CartApi';
+import { processActions } from '../helpers/ActionsProcessor';
 
 interface RegistrablePromotion {
     key: string,
@@ -88,7 +88,7 @@ export default class PromotionRunner {
 
         if(  plan.creations.length > 0 ) {
             actions.push({
-                actions: 'add', 
+                action: 'add', 
                 payload: {
                     items: plan.creations.map( creation => {
                         return {
@@ -101,9 +101,12 @@ export default class PromotionRunner {
             })
         }
         
-        const updatedCart = CartApi.process(actions); 
-
-        return updatedCart;
+        try {
+            const updatedCart = await processActions(actions); 
+            return updatedCart; 
+        } catch( error ) {
+            console.log(error); 
+        }
     }
 
     /**
