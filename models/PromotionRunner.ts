@@ -114,7 +114,7 @@ export default class PromotionRunner {
      * Excecutes the plan in the cart, and then returns the cart object 
      * back to the caller. 
      */
-    async run(cart?: Cart): Promise<Cart> {
+    async check(cart?: Cart): Promise<Cart> {
         if (!cart) {
             cart = await CartApi.getCart(); 
         }
