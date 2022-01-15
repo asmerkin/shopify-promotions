@@ -1,9 +1,4 @@
 export default class CartApi {
-    headers = {
-        'Content-Type': 'application/json', 
-        'Accept': 'application/json'
-    }
-
     static async call(method: 'get' | 'post', url: string, payload?: object) {
         if ( method === 'get') {
             return fetch(url).then( response => response.json() ); 

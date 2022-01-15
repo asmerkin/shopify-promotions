@@ -2,6 +2,7 @@ import Promotion from '../models/Promotion';
 import Plan from '../models/Plan'; 
 import Cart from '../definitions/Cart'; 
 import { processActions } from '../helpers/ActionsProcessor';
+import CartApi from '../helpers/CartApi';
 
 interface RegistrablePromotion {
     key: string,
@@ -115,7 +116,7 @@ export default class PromotionRunner {
      */
     async run(cart?: Cart): Promise<Cart> {
         if (!cart) {
-            // we do something to get the cart. 
+            cart = await CartApi.getCart(); 
         }
 
         const plan = await this.plan(cart); 
