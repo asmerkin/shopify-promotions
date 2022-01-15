@@ -73,7 +73,7 @@ describe('Promotion Plans', () => {
 
 
     test('Deletes all orphan followers', () => {
-        const promotions = []; 
+        const promotions: Promotion[] = []; 
         const cart = (new CartGenerator([
             {
                 id: 444444,
