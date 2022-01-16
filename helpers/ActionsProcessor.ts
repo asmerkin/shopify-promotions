@@ -1,10 +1,5 @@
-import Cart from "../definitions/Cart";
+import { Cart, CartApiAction } from "../types";
 import CartApi from "./CartApi";
-
-interface CartApiAction {
-    action: 'change' | 'update' | 'add', 
-    payload: object 
-}
 
 /**
  * Runs the processing queue to alter the cart in the desired way. 

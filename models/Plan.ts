@@ -1,5 +1,5 @@
-import Cart from "../definitions/Cart";
-import { PromotionStateCreation, PromotionStateMutation } from "../definitions/State";
+import {Cart} from "../types";
+import { PromotionStateCreation, PromotionStateMutation } from "../types";
 import Promotion from "./Promotion";
 
 export default class Plan {

@@ -1,4 +1,4 @@
-import Cart, { CartLineItem } from "../../definitions/Cart";
+import {Cart, CartLineItem} from "../../types";
 
 export default class CartGenerator {
 

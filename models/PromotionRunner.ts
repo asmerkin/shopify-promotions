@@ -1,20 +1,8 @@
 import Promotion from '../models/Promotion'; 
 import Plan from '../models/Plan'; 
-import Cart from '../definitions/Cart'; 
 import { processActions } from '../helpers/ActionsProcessor';
 import CartApi from '../helpers/CartApi';
-
-interface RegistrablePromotion {
-    key: string,
-    lookup_variants: number[],
-    add_variants: Array<{
-        id: number, 
-        quantity: number, 
-        properties?: Array<{
-            [index: string]: string
-        }>
-    }>
-}
+import { Cart, CartApiAction, RegistrablePromotion } from '../types';
 
 export default class PromotionRunner {
     promotions: Promotion[] = []; 
@@ -58,7 +46,7 @@ export default class PromotionRunner {
      * @returns 
      */
     async commit(cart: Cart, plan: Plan) {
-        const actions = []; 
+        const actions: CartApiAction[] = []; 
         // this method should create a series of calls to, 
         // 1. delete all deltable items. 
         // 2. mutate all changeable items. 
