@@ -2,15 +2,15 @@ import {Cart, CartLineItem} from "../../types";
 
 export default class CartGenerator {
 
-    line_items: CartLineItem[]
+    items: CartLineItem[]
 
-    constructor(line_items: CartLineItem[]) {
-        this.line_items = line_items; 
+    constructor(items: CartLineItem[]) {
+        this.items = items; 
     }
 
     generate(): Cart {
         return {
-            line_items: this.line_items
+            items: this.items
         }
     }
 }

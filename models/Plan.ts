@@ -45,9 +45,9 @@ export default class Plan {
     removeOrphans(): string[] {
         // Orphans are all the followers that do not have a belonging 
         // leader line_item. 
-        return this.cart.line_items.filter( item => {
+        return this.cart.items.filter( item => {
             return item.properties?._promotion_leader === 'false'
-                && !this.cart.line_items.some( found => {
+                && !this.cart.items.some( found => {
                     return found.key === item.properties?._promotion_leader_key
                 }); 
         }).map(item => item.key); 

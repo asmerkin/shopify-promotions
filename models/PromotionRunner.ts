@@ -54,7 +54,7 @@ export default class PromotionRunner {
         if ( plan.deletions.length > 0) {
             actions.push({
                 action: 'update', 
-                payload: cart.line_items.map( item => {
+                payload: cart.items.map( item => {
                     return plan.deletions.includes(item.key)
                         ? 0
                         : item.quantity; 

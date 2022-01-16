@@ -32,7 +32,7 @@ export interface CartLineItem {
 }
 
 export interface Cart {
-    line_items: CartLineItem[]
+    items: CartLineItem[]
 }
 
 export type PromotionStateCreation = {

@@ -25,7 +25,7 @@ export default class Promotion {
             deletions: []
         }
 
-        cart.line_items.filter( item => {
+        cart.items.filter( item => {
             return this.lookup_variants.includes(item.variant_id)
                 && item.properties?._promotion_leader !== 'false'; 
         }).forEach( leader => {
@@ -35,7 +35,7 @@ export default class Promotion {
             }
 
             // followers are the items added by this promotion. 
-            const followers = cart.line_items.filter( item => {
+            const followers = cart.items.filter( item => {
                 return item.properties?._promotion_leader === 'false'
                     && item.properties?._promotion_key === this.key
                     && item.properties?._promotion_leader_key === leader.key
