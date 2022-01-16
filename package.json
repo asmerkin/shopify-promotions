@@ -1,6 +1,6 @@
 {
   "name": "shopify-promotions",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A tool to integrate promotions to Shopify themes",
   "main": "index.ts",
   "scripts": {
