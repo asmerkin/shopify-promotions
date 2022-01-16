@@ -17,7 +17,7 @@ At this stage, these promotiosn won't add discount codes to cart. This is someth
 ### 1. Inject the promotions script into your store. 
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/shopify-promotions@0.1.1/dist/runner.js" defer>
+<script src="https://cdn.jsdelivr.net/npm/shopify-promotions@0.1.2/dist/runner.js" defer></script>
 ```
 
 ### 2. Register all your promotions. 
