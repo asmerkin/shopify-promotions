@@ -1,3 +1,40 @@
+export interface RegistrablePromotion {
+    key: string,
+    lookup_variants: number[],
+    add_variants: Array<{
+        id: number, 
+        quantity: number, 
+        properties?: Array<{
+            [index: string]: string
+        }>
+    }>
+}
+
+export interface Variant {
+    id: number, 
+    quantity: number
+}
+
+
+export interface CartApiAction {
+    action: 'change' | 'update' | 'add', 
+    payload: object 
+}
+
+export interface CartLineItem {
+    id: number, 
+    key: string, 
+    variant_id: number, 
+    quantity: number, 
+    properties?: {
+        [index: string]: string 
+    }
+}
+
+export interface Cart {
+    line_items: CartLineItem[]
+}
+
 export type PromotionStateCreation = {
     id: number,
     quantity: number,

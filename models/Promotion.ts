@@ -1,5 +1,4 @@
-import Cart, { CartLineItem } from "../definitions/Cart";
-import { PromotionState } from "../definitions/State";
+import { Cart, CartLineItem, PromotionState, PromotionStateMutation, RegistrablePromotion, Variant } from "../types";
 
 export default class Promotion {
 
@@ -13,14 +12,14 @@ export default class Promotion {
         }>
     }>
 
-    constructor({key, lookup_variants, add_variants}) {
-        this.key = key; 
-        this.lookup_variants = lookup_variants; 
-        this.add_variants = add_variants; 
+    constructor(promotion: RegistrablePromotion) {
+        this.key = promotion.key; 
+        this.lookup_variants = promotion.lookup_variants; 
+        this.add_variants = promotion.add_variants; 
     }
 
     run(cart: Cart): PromotionState {
-        const state = {
+        const state: PromotionState = {
             creations: [], 
             mutations: [], 
             deletions: []
@@ -68,7 +67,7 @@ export default class Promotion {
      * @param item the cart line item to use, 
      * @param state the return state
      */
-    hookPromotionLeader(item, state) {
+    hookPromotionLeader(item: CartLineItem, state: PromotionState) {
         state.mutations.push({
             key: item.key,
             quantity: item.quantity, 
@@ -90,7 +89,7 @@ export default class Promotion {
      * @param variant 
      * @param state 
      */
-    createNewFollower(leader: CartLineItem, variant, state) {
+    createNewFollower(leader: CartLineItem, variant: Variant, state: PromotionState) {
         state.creations.push({
             id: variant.id,
             quantity: variant.quantity * leader.quantity,
@@ -111,11 +110,11 @@ export default class Promotion {
      * @param quantity 
      * @param state 
      */
-    adjustFollowerQuantity(follower: CartLineItem, quantity: number, state) {
+    adjustFollowerQuantity(follower: CartLineItem, quantity: number, state: PromotionState) {
         state.mutations.push({
             key: follower.key, 
             quantity: quantity, 
             properties: follower.properties
-        }); 
+        } as PromotionStateMutation); 
     }
 }

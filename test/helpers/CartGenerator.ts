@@ -1,10 +1,10 @@
-import Cart, { CartLineItem } from "../../definitions/Cart";
+import {Cart, CartLineItem} from "../../types";
 
 export default class CartGenerator {
 
     line_items: CartLineItem[]
 
-    constructor(line_items) {
+    constructor(line_items: CartLineItem[]) {
         this.line_items = line_items; 
     }
 

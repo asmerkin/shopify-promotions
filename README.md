@@ -18,7 +18,7 @@ At this stage, these promotiosn won't add discount codes to cart. This is someth
 
 > This step has to be defined. 
 
-### 2. Register all your promotions. 
+### 2. Register all your promotions. 
 
 ```javascript
 window.PromotionRunner.register([
@@ -40,9 +40,9 @@ window.PromotionRunner.register([
 
 | Parameter | Required? | Description |
 | --------- | --------- | ----------- |
-| key       | yes       | An unique key per promotion that we will use to identify promotions | 
-| lookup_varints | yes | A list of variant ids that the script needs to lookup to apply promotions | 
-| add_variants | yes | a list of variants with quantities and properties we need to add for each found variant id | 
+| `key`       | yes       | An unique key per promotion that we will use to identify promotions | 
+|` lookup_variants` | yes | A list of variant ids that the script needs to lookup to apply promotions | 
+|` add_variants` | yes | a list of variants with quantities and properties we need to add for each found variant id | 
 
 ### 3. Hook the promotions checker after every cart update. 
 

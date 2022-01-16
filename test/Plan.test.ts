@@ -1,6 +1,6 @@
-import Cart from "../definitions/Cart";
 import Plan from "../models/Plan";
 import Promotion from "../models/Promotion";
+import { Cart } from "../types";
 import CartGenerator from "./helpers/CartGenerator";
 
 describe('Promotion Plans', () => {
@@ -73,7 +73,7 @@ describe('Promotion Plans', () => {
 
 
     test('Deletes all orphan followers', () => {
-        const promotions = []; 
+        const promotions: Promotion[] = []; 
         const cart = (new CartGenerator([
             {
                 id: 444444,

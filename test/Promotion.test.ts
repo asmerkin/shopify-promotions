@@ -1,4 +1,4 @@
-import Cart from "../definitions/Cart";
+import {Cart} from "../types";
 import Promotion from "../models/Promotion";
 import CartGenerator from "./helpers/CartGenerator";
 

@@ -18,15 +18,15 @@ export default class CartApi {
         return this.call('get', '/cart.js'); 
     }
 
-    static async update(payload) {
+    static async update(payload: any) {
         return this.call('post', '/cart/update.js', payload); 
     }
 
-    static async change(payload) {
+    static async change(payload: any) {
         return this.call('post', '/cart/change.js', payload); 
     }
 
-    static async add(payload) {
+    static async add(payload: any) {
         return this.call('post', '/cart/add.js', payload); 
     }
 }
