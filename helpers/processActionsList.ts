@@ -9,7 +9,7 @@ import CartApi from "./CartApi";
  * @param cart the last cart response. 
  * @returns the last cart response after the actions array is cleared. 
  */
-export async function processActions(actions: CartApiAction[]): Promise<Cart> {
+export async function processActionsList(actions: CartApiAction[]): Promise<Cart> {
     let lastCart = null; 
 
     actions.forEach ( async (next) => {

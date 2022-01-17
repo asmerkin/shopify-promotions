@@ -1,6 +1,6 @@
 import Promotion from '../models/Promotion'; 
 import Plan from '../models/Plan'; 
-import { processActions } from '../helpers/ActionsProcessor';
+import { processActionsList } from '../helpers/processActionsList';
 import CartApi from '../helpers/CartApi';
 import { Cart, CartApiAction, RegistrablePromotion } from '../types';
 
@@ -93,7 +93,7 @@ export default class PromotionRunner {
         }
         
         try {
-            const updatedCart = await processActions(actions); 
+            const updatedCart = await processActionsList(actions); 
             return updatedCart; 
         } catch( error ) {
             console.log(error); 

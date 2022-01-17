@@ -1,6 +1,6 @@
 import Plan from "../models/Plan";
 import PromotionRunner from "../models/PromotionRunner";
-import CartGenerator from "./helpers/CartGenerator";
+import CartGenerator from "../helpers/CartGenerator";
 import CartApi from '../helpers/CartApi'; 
 import { mocked } from "ts-jest/dist/utils/testing";
 jest.mock('../helpers/CartApi'); 
