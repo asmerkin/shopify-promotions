@@ -1,6 +1,6 @@
 import Promotion from '../models/Promotion'; 
 import Plan from '../models/Plan'; 
-import { processActions } from '../helpers/ActionsProcessor';
+import { processActionsList } from '../helpers/processActionsList';
 import CartApi from '../helpers/CartApi';
 import { Cart, CartApiAction, RegistrablePromotion } from '../types';
 
@@ -54,11 +54,13 @@ export default class PromotionRunner {
         if ( plan.deletions.length > 0) {
             actions.push({
                 action: 'update', 
-                payload: cart.items.map( item => {
-                    return plan.deletions.includes(item.key)
-                        ? 0
-                        : item.quantity; 
-                })
+                payload: {
+                    updates: cart.items.map( item => {
+                        return plan.deletions.includes(item.key)
+                            ? 0
+                            : item.quantity; 
+                    })
+                }
             }); 
         }
 
@@ -89,9 +91,13 @@ export default class PromotionRunner {
                 }
             })
         }
+
+        if (actions.length === 0 ) {
+            return cart; 
+        }
         
         try {
-            const updatedCart = await processActions(actions); 
+            const updatedCart = await processActionsList(actions); 
             return updatedCart; 
         } catch( error ) {
             console.log(error); 
