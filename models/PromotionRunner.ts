@@ -91,6 +91,10 @@ export default class PromotionRunner {
                 }
             })
         }
+
+        if (actions.length === 0 ) {
+            return cart; 
+        }
         
         try {
             const updatedCart = await processActionsList(actions); 

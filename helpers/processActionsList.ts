@@ -12,13 +12,13 @@ import CartApi from "./CartApi";
 export async function processActionsList(actions: CartApiAction[]): Promise<Cart> {
     let lastCart = null; 
 
-    actions.forEach ( async (next) => {
+    for( const next of actions) {
         try {
-            lastCart = await CartApi[next.action](next.payload); 
+            lastCart = await CartApi[next.action](next.payload);
         } catch ( error ) {
             console.log( error ); 
         }
-    }); 
+    }
 
     return lastCart as Cart;
 }

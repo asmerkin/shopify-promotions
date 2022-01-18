@@ -2,10 +2,18 @@ import Plan from "../models/Plan";
 import PromotionRunner from "../models/PromotionRunner";
 import CartGenerator from "../helpers/CartGenerator";
 import CartApi from '../helpers/CartApi'; 
-import { mocked } from "ts-jest/dist/utils/testing";
-jest.mock('../helpers/CartApi'); 
+import { Cart } from "../types";
 
-const mock = mocked(CartApi, true); 
+beforeAll( () => {
+    jest.spyOn(CartApi, 'getCart').mockImplementation( async () => { return {} as Cart }); 
+    jest.spyOn(CartApi, 'add').mockImplementation( async (payload) => { return {} as Cart }); 
+    jest.spyOn(CartApi, 'change').mockImplementation( async (payload) => { return {} as Cart }); 
+    jest.spyOn(CartApi, 'update').mockImplementation( async (payload) => { return {} as Cart }); 
+}); 
+
+afterEach( () => {
+    jest.clearAllMocks(); 
+})
 
 describe('Promotion runner Tests', () => {
     test('it can register single new promotions', () => {
@@ -49,7 +57,7 @@ describe('Promotion runner Tests', () => {
     });
 
 
-    it('Can commit a plan to the API', () => {
+    it('Can commit a plan to the API', async () => {
         const cart = (new CartGenerator([])).generate(); 
         const runner = new PromotionRunner(); 
         const plan = (new Plan(cart))
@@ -98,14 +106,24 @@ describe('Promotion runner Tests', () => {
             ])
             .setDeletions(['abcd', '113']);
 
-        runner.commit(cart, plan); 
+        const response = await runner.commit(cart, plan); 
 
-        expect(mock.change).toBeCalledTimes(2); 
-        expect(mock.add).toBeCalledTimes(1); 
-        expect(mock.update).toBeCalledTimes(1); 
+        expect(response).toBeTruthy(); 
+        expect(CartApi.change).toBeCalledTimes(2); 
+        expect(CartApi.add).toBeCalledTimes(1); 
+        expect(CartApi.update).toBeCalledTimes(1);
+    });
 
-        // Here we should create a plan object with some values, 
-        // and then trigger the commit, checking the calls to a 
-        // mock to make sure all api calls were made. 
+    it('Commiting an empty plan returns the initial cart', async () => {
+        const cart = (new CartGenerator([])).generate(); 
+        const runner = new PromotionRunner(); 
+        const plan = (new Plan(cart)); 
+
+        const response = await runner.commit(cart, plan); 
+
+        expect(response).toBeTruthy(); 
+        expect(CartApi.change).toBeCalledTimes(0); 
+        expect(CartApi.add).toBeCalledTimes(0); 
+        expect(CartApi.update).toBeCalledTimes(0);
     }); 
 }); 
