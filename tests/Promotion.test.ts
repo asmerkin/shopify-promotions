@@ -1,6 +1,6 @@
 import {Cart} from "../types";
 import Promotion from "../models/Promotion";
-import CartGenerator from "./helpers/CartGenerator";
+import CartGenerator from "../helpers/CartGenerator";
 
 describe('Promotion Tests', () => {
 
