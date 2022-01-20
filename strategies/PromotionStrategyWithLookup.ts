@@ -1,5 +1,6 @@
 import { adjustFollowerQuantity, createNewFollower, hookPromotionLeader } from "../helpers/Promotions";
-import { Cart, PromotionState } from "../types";
+import PromotionState from "../models/PromotionState";
+import { Cart } from "../types";
 import PromotionStrategy from "./PromotionStrategy";
 
 /**
@@ -10,11 +11,7 @@ export default class PromotionStrategyWithLookup extends PromotionStrategy {
 
 
     run(cart: Cart): PromotionState {
-        const state: PromotionState = {
-            creations: [], 
-            mutations: [], 
-            deletions: []
-        }
+        const state: PromotionState = new PromotionState(); 
 
         cart.items.filter( item => {
             return this.promotion.lookup_variants.includes(item.variant_id)

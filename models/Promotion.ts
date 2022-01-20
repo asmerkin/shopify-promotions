@@ -1,5 +1,6 @@
 import PromotionStrategyFactory from "../strategies/PromotionStrategyFactory";
-import { Cart, CartLineItem, PromotionState, PromotionStateMutation, RegistrablePromotion, Variant } from "../types";
+import { Cart, RegistrablePromotion } from "../types";
+import PromotionState from "./PromotionState";
 
 export default class Promotion {
 
@@ -21,14 +22,26 @@ export default class Promotion {
         this.min_purchase = promotion.min_purchase || null; 
     }
 
+    /**
+     * Runs the promotion
+     * 
+     * @param cart Shopify cart. 
+     * @returns An object containing the plan to execute. 
+     */
     run(cart: Cart): PromotionState {
         if ( this.min_purchase && this.getCartSubtotal(cart) < this.min_purchase) {
-            return { creations: [], mutations: [], deletions: [] }; 
+            return new PromotionState(); 
         }
 
         return PromotionStrategyFactory.getStrategy(this).run(cart); 
     }
 
+    /**
+     * Gets the cart subtotal without all promotion items. 
+     * 
+     * @param cart Shopify cart. 
+     * @returns the subtotal value. 
+     */
     getCartSubtotal(cart: Cart): number {
         return cart.items.reduce((total, item) => {
             if ( item.properties?._promotion_leader !== 'false' ) {

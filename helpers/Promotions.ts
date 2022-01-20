@@ -1,8 +1,9 @@
 import Promotion from "../models/Promotion";
-import { CartLineItem, PromotionState, PromotionStateMutation, Variant } from "../types";
+import PromotionState from "../models/PromotionState";
+import { CartLineItem, PromotionStateMutation, Variant } from "../types";
 
 export function hookPromotionLeader(promotion: Promotion, item: CartLineItem, state: PromotionState) {
-    state.mutations.push({
+    state.addMutation({
         key: item.key,
         quantity: item.quantity, 
         properties: {
@@ -19,7 +20,7 @@ export function hookPromotionLeader(promotion: Promotion, item: CartLineItem, st
 
 
 export function adjustFollowerQuantity(follower: CartLineItem, quantity: number, state: PromotionState) {
-    state.mutations.push({
+    state.addMutation({
         key: follower.key, 
         quantity: quantity, 
         properties: follower.properties
@@ -27,8 +28,13 @@ export function adjustFollowerQuantity(follower: CartLineItem, quantity: number,
 }
 
 
-export function createNewFollower(promotion: Promotion, leader: CartLineItem, variant: Variant, state: PromotionState) {
-    state.creations.push({
+export function createNewFollower(
+    promotion: Promotion,
+    leader: CartLineItem,
+    variant: Variant,
+    state: PromotionState
+    ) {
+    state.addCreation({
         id: variant.id,
         quantity: variant.quantity * leader.quantity,
         properties: {

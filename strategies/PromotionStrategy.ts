@@ -1,5 +1,6 @@
 import Promotion from "../models/Promotion";
-import { Cart, PromotionState } from "../types";
+import PromotionState from "../models/PromotionState";
+import { Cart } from "../types";
 
 export default class PromotionStrategy {
 
