@@ -12,7 +12,7 @@ describe('Promotion Tests', () => {
         }); 
 
         const cart: Cart = (new CartGenerator([
-            {id: 123456, key: 'abc', variant_id: 123, quantity: 1, properties: {_something: 'true'}}
+            {id: 123456, key: 'abc', variant_id: 123, quantity: 1, properties: {_something: 'true'}, original_line_price: 8000}
         ])).generate();
 
         let {creations, mutations, deletions} = promotion.run(cart); 
@@ -56,6 +56,7 @@ describe('Promotion Tests', () => {
                 key: 'abc',
                 variant_id: 123,
                 quantity: 1,
+                original_line_price: 8000,
                 properties: {
                     _promotion: 'true', 
                     _promotion_leader: 'true', 
@@ -68,6 +69,7 @@ describe('Promotion Tests', () => {
                 key: 'def',
                 variant_id: 789,
                 quantity: 2,
+                original_line_price: 8000,
                 properties: {
                     _promotion: 'true', 
                     _promotion_leader: 'false', 
@@ -96,6 +98,7 @@ describe('Promotion Tests', () => {
                 key: 'abc',
                 variant_id: 123,
                 quantity: 3,
+                original_line_price: 8000,
                 properties: {
                     _promotion: 'true', 
                     _promotion_leader: 'true', 
@@ -108,6 +111,7 @@ describe('Promotion Tests', () => {
                 key: 'def',
                 variant_id: 789,
                 quantity: 2,
+                original_line_price: 8000,
                 properties: {
                     _promotion: 'true', 
                     _promotion_leader: 'false', 
@@ -131,4 +135,31 @@ describe('Promotion Tests', () => {
         expect(creations).toHaveLength(0);
         expect(deletions).toHaveLength(0); 
     });
+
+
+    test('A promotion with a cart minimum is only applied if the cart subtotal is above', () => {
+        const promotion = new Promotion({
+            key: 'addnewitem', 
+            min_purchase: 10000, 
+            lookup_variants: [123, 456], 
+            add_variants: [{id: 789, quantity: 2}],
+        });
+
+        const cart: Cart = (new CartGenerator([
+            {id: 123456, key: 'abc', variant_id: 123, quantity: 1, original_line_price: 8000}
+        ])).generate();
+
+        let firstResult = promotion.run(cart); 
+        expect(firstResult.creations).toHaveLength(0); 
+        expect(firstResult.mutations).toHaveLength(0); 
+
+        const secondCart: Cart = (new CartGenerator([
+            {id: 123456, key: 'abc', variant_id: 123, quantity: 1, original_line_price: 12000}
+        ])).generate();
+
+        let secondResult = promotion.run(secondCart); 
+        expect(secondResult.creations).toHaveLength(1); 
+        expect(secondResult.mutations).toHaveLength(1); 
+    }); 
+
 }); 

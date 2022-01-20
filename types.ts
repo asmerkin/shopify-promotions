@@ -1,6 +1,7 @@
 export interface RegistrablePromotion {
     key: string,
     lookup_variants: number[],
+    min_purchase?: number,
     add_variants: Array<{
         id: number, 
         quantity: number, 
@@ -26,6 +27,7 @@ export interface CartLineItem {
     key: string, 
     variant_id: number, 
     quantity: number, 
+    original_line_price?: number,
     properties?: {
         [index: string]: string 
     }

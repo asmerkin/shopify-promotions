@@ -27,6 +27,7 @@ window.PromotionRunner.register([
     {
         key: 'somekey', 
         lookup_variants: [123, 456], 
+        min_purchase: 10000, 
         add_variants: [
             {
                 id: 789,
@@ -42,9 +43,10 @@ window.PromotionRunner.register([
 
 | Parameter | Required? | Description |
 | --------- | --------- | ----------- |
-| `key`       | yes       | An unique key per promotion that we will use to identify promotions | 
-|` lookup_variants` | yes | A list of variant ids that the script needs to lookup to apply promotions | 
-|` add_variants` | yes | a list of variants with quantities and properties we need to add for each found variant id | 
+| `key`     | yes       | An unique key per promotion that we will use to identify promotions | 
+| `lookup_variants` | yes | A list of variant ids that the script needs to lookup to apply promotions | 
+| `add_variants` | yes | a list of variants with quantities and properties we need to add for each found variant id | 
+| `min_purchase` | no  | the promotion is only executed if the minimum purchase is set **in cents**. | 
 
 ### 3. Hook the promotions checker after every cart update. 
 

@@ -4,6 +4,7 @@ export default class Promotion {
 
     key: string; 
     lookup_variants: number[]; 
+    min_purchase?: number;
     add_variants: Array<{
         id: number, 
         quantity: number, 
@@ -16,6 +17,7 @@ export default class Promotion {
         this.key = promotion.key; 
         this.lookup_variants = promotion.lookup_variants; 
         this.add_variants = promotion.add_variants; 
+        this.min_purchase = promotion.min_purchase || null; 
     }
 
     run(cart: Cart): PromotionState {
@@ -23,6 +25,10 @@ export default class Promotion {
             creations: [], 
             mutations: [], 
             deletions: []
+        }
+
+        if ( this.min_purchase && this.getCartSubtotal(cart) < this.min_purchase) {
+            return state; 
         }
 
         cart.items.filter( item => {
@@ -116,5 +122,15 @@ export default class Promotion {
             quantity: quantity, 
             properties: follower.properties
         } as PromotionStateMutation); 
+    }
+
+
+    getCartSubtotal(cart: Cart): number {
+        return cart.items.reduce((total, item) => {
+            if ( item.properties?._promotion_leader !== 'false' ) {
+                total += item.original_line_price; 
+            }
+            return total; 
+        }, 0);
     }
 }
